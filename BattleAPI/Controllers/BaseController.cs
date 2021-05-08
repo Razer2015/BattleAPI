@@ -16,7 +16,7 @@ namespace BattleAPI.Controllers
 
         public IActionResult BadRequestBattlelogResponse<T>(T data, string message)
         {
-            return Ok(new BattlelogResponse<T> {
+            return BadRequest(new BattlelogResponse<T> {
                 Type = "error",
                 Message = message,
                 Data = data

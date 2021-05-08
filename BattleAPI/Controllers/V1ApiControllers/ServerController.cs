@@ -33,7 +33,7 @@ namespace BattleAPI.Controllers.V1ApiControllers
             try
             {
                 var cacheKey = guid;
-                var gameId = _distributedCache.GetString(cacheKey);
+                var gameId = GetGameIdFromCache(cacheKey);
                 if (!string.IsNullOrEmpty(gameId))
                 {
                     _logger?.LogInformation("GameId {gameId} fetched from cache for Guid {guid}", gameId, guid);
@@ -43,9 +43,9 @@ namespace BattleAPI.Controllers.V1ApiControllers
                     var serverInfo = BattlelogClient.GetServerShow(guid, platform);
                     gameId = serverInfo.gameId;
 
-                    _distributedCache.SetString(cacheKey, gameId, new DistributedCacheEntryOptions {
+                    _distributedCache.SetStringAsync(cacheKey, gameId, new DistributedCacheEntryOptions {
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2)
-                    });
+                    }).ConfigureAwait(false);
                     _logger?.LogInformation("GameId {gameId} added to cache for Guid {guid}", gameId, guid);
                 }
 
@@ -114,6 +114,20 @@ namespace BattleAPI.Controllers.V1ApiControllers
             catch (Exception ex)
             {
                 _logger?.LogError(ex, "Couldn't retrieve server details for gameId {gameId}", gameId);
+                return null;
+            }
+        }
+
+        private string GetGameIdFromCache(string cacheKey)
+        {
+            try
+            {
+                return _distributedCache.GetString(cacheKey);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception while trying to fetch key from Redis.");
+
                 return null;
             }
         }

@@ -7,6 +7,8 @@ namespace BattleAPI
     {
         public static void Main(string[] args)
         {
+            System.Threading.ThreadPool.SetMinThreads(200, 200);
+
             CreateHostBuilder(args).Build().Run();
         }
 

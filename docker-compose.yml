@@ -9,7 +9,7 @@ services:
     environment:
       - EA_EMAIL=yourEAEmail
       - EA_PASSWORD=yourEAPassword
-      - REDIS_CONFIGURATION=redis,abortConnect=false
+      - REDIS_CONFIGURATION=redis,abortConnect=false,connectTimeout=3000
     networks:
       - redis-net
     depends_on:
