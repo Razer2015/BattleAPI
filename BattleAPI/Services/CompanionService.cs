@@ -42,6 +42,7 @@ namespace BattleAPI.Services
             catch (Exception ex)
             {
                 LogMessage(ex.ToString(), LogType.Error);
+                return null;
             }
 
             return output.Model;

@@ -6,6 +6,7 @@ using CompanionAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 using Shared.Models;
 using System;
 
@@ -26,8 +27,8 @@ namespace BattleAPI.Controllers.V1ApiControllers
             _distributedCache = distributedCache;
         }
 
-        [HttpGet("getNumPlayersOnServer/{platform}/{guid}/")]
-        public IActionResult GetNumPlayersOnServer(string platform, string guid)
+        [HttpGet("getNumPlayersOnServer/{platform}/{guid}/{type?}/")]
+        public IActionResult GetNumPlayersOnServer(string platform, string guid, SlotResponseType type = SlotResponseType.Battlelog)
         {
             try
             {
@@ -56,7 +57,10 @@ namespace BattleAPI.Controllers.V1ApiControllers
                     return BadRequestBattlelogResponse<SlotTypesViewModel>(null, "Couldn't retrieve server slots");
                 }
 
-                return Ok(model.CompanionPlayerCountsToBattlelog());
+                return type switch {
+                    SlotResponseType.Companion => SuccessBattlelogResponse(model.Slots),
+                    _ => Ok(model.CompanionPlayerCountsToBattlelog()),
+                };
             }
             catch (Exception ex)
             {
@@ -65,8 +69,8 @@ namespace BattleAPI.Controllers.V1ApiControllers
             }
         }
 
-        [HttpGet("serverSlots/{gameId}/")]
-        public IActionResult ServerSlotsByGameId(string gameId)
+        [HttpGet("serverSlots/{gameId}/{type?}/")]
+        public IActionResult ServerSlotsByGameId(string gameId, SlotResponseType type = SlotResponseType.Battlelog)
         {
             try
             {
@@ -79,7 +83,10 @@ namespace BattleAPI.Controllers.V1ApiControllers
                     return BadRequestBattlelogResponse<SlotTypesViewModel>(null, "Couldn't retrieve server slots");
                 }
 
-                return SuccessBattlelogResponse(model.Slots);
+                return type switch {
+                    SlotResponseType.Companion => SuccessBattlelogResponse(model.Slots),
+                    _ => Ok(model.CompanionPlayerCountsToBattlelog()),
+                };
             }
             catch (Exception ex)
             {
