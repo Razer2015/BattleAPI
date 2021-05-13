@@ -33,6 +33,31 @@ http://localhost:5234/api/v1/server/serverSlots/36028797037504179/0/
 http://localhost:5234/api/v1/server/serverSlots/36028797037504179/1/
 ```
 
+## Usage in stack
+
+### Deploying the stack
+```
+docker stack deploy -c docker-compose.yml battleapi
+```
+
+### Removing the stack
+```
+docker stack rm battleapi
+```
+
+### Updating the stack
+
+#### Pulling an updated image
+```
+docker pull xfilefin/battleapi:latest
+```
+
+#### Updating the stack to use the new image
+`--force` required if you have the same tag as the currently running one. E.g. `latest`
+```
+docker service update --image xfilefin/battleapi:latest battleapi_backend --force
+```
+
 ## Building
 
 `docker build -t xfilefin/battleapi . --file BattleAPI/Dockerfile`
