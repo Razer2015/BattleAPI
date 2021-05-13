@@ -106,6 +106,56 @@ namespace BattleAPI.Controllers.V1ApiControllers
             }
         }
 
+        [HttpGet("serverDetails/{platform}/{guid}/")]
+        public IActionResult ServerDetailsByGuid(string platform, string guid)
+        {
+            try
+            {
+                var cacheKey = guid;
+                var gameId = GetGameIdFromCache(cacheKey);
+                ServerDetailsViewModel model = null;
+
+            fetchNewGameId:
+                if (!string.IsNullOrEmpty(gameId))
+                {
+                    _logger?.LogInformation("GameId {gameId} fetched from cache for Guid {guid}", gameId, guid);
+
+                    _logger?.LogInformation("Retrieving server details for gameId {gameId}", gameId);
+                    model = _companionService?.GetServerDetails(gameId);
+
+                    // Check if guid matches (in other words whether the gameId was correct or not)
+                    if (!guid.Equals(model?.Guid, StringComparison.OrdinalIgnoreCase))
+                    {
+                        gameId = null;
+                        goto fetchNewGameId;
+                    }
+                }
+                else
+                {
+                    var serverInfo = BattlelogClient.GetServerShow(guid, platform);
+                    gameId = serverInfo.gameId;
+
+                    _distributedCache.SetStringAsync(cacheKey, gameId).ConfigureAwait(false);
+                    _logger?.LogInformation("GameId {gameId} added to cache for Guid {guid}", gameId, guid);
+
+                    _logger?.LogInformation("Retrieving server details for gameId {gameId}", gameId);
+                    model = _companionService?.GetServerDetails(gameId);
+                }
+
+                if (model == null)
+                {
+                    return BadRequestBattlelogResponse<ServerDetailsViewModel>(null, "Couldn't retrieve server details");
+                }
+
+                return SuccessBattlelogResponse(model);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Couldn't retrieve server slots for guid {guid}", guid);
+                return null;
+            }
+        }
+
         [HttpGet("serverDetails/{gameId}/")]
         public IActionResult ServerDetailsByGameId(string gameId)
         {

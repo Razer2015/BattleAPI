@@ -33,7 +33,55 @@ namespace CompanionAPI.Models
         [JsonProperty("mapImageUrl")]
         public string MapImageUrl { get; set; }
 
-        // TODO... rest
+        // TODO... map the rest properly, currently has just objects for some properties
+        [JsonProperty("mapExpansion")]
+        public object MapExpansion { get; set; }
+        [JsonProperty("expansions")]
+        public object Expansions { get; set; }
+        [JsonProperty("game")]
+        public string Game { get; set; }
+        [JsonProperty("platform")]
+        public string Platform { get; set; }
+        [JsonProperty("passwordProtected")]
+        public string PasswordProtected { get; set; }
+        [JsonProperty("operationIndex")]
+        public string OperationIndex { get; set; }
+        [JsonProperty("ip")]
+        public string Ip { get; set; }
+        [JsonProperty("pingSiteAlias")]
+        public string PingSiteAlias { get; set; }
+        [JsonProperty("isFavorite")]
+        public bool IsFavorite { get; set; }
+        [JsonProperty("custom")]
+        public bool Custom { get; set; }
+        [JsonProperty("preset")]
+        public string Preset { get; set; }
+        [JsonProperty("tickRate")]
+        public object TickRate { get; set; }
+        [JsonProperty("serverType")]
+        public string ServerType { get; set; }
+        [JsonProperty("settings")]
+        public object Settings { get; set; }
+        [JsonProperty("rotation")]
+        public object Rotation { get; set; }
+        [JsonProperty("punkbusterEnabled")]
+        public bool PunkbusterEnabled { get; set; }
+        [JsonProperty("fairfightEnabled")]
+        public bool FairfightEnabled { get; set; }
+        [JsonProperty("experience")]
+        public string Experience { get; set; }
+        [JsonProperty("officialExperienceId")]
+        public string OfficialExperienceId { get; set; }
+        [JsonProperty("serverBookmarkCount")]
+        public string ServerBookmarkCount { get; set; }
+        [JsonProperty("mixId")]
+        public string MixId { get; set; }
+        [JsonProperty("serverMode")]
+        public string ServerMode { get; set; }
+        [JsonProperty("mapRotation")]
+        public object MapRotation { get; set; }
+        [JsonProperty("secret")]
+        public string Secret { get; set; }
     }
 
     public class SlotTypesViewModel
