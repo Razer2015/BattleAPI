@@ -8,13 +8,6 @@ namespace Battlelog
 {
     public static class BattlelogClient
     {
-        static GZipWebClient _webClient;
-
-        static BattlelogClient()
-        {
-            _webClient = new GZipWebClient();
-        }
-
         /// <summary>
         ///     Get the server show data
         /// </summary>
@@ -25,7 +18,8 @@ namespace Battlelog
         {
             try
             {
-                string result = _webClient.DownloadString($"https://battlelog.battlefield.com/bf4/servers/show/{platform}/{guid}/SERVER/?json=1");
+                using var webClient = new GZipWebClient();
+                string result = webClient.DownloadString($"https://battlelog.battlefield.com/bf4/servers/show/{platform}/{guid}/SERVER/?json=1");
 
                 JObject response = JObject.Parse(result);
                 if (!response.TryGetValue("type", out var type))
@@ -56,7 +50,8 @@ namespace Battlelog
         {
             try
             {
-                string result = _webClient.DownloadString($"https://keeper.battlelog.com/snapshot/{guid}");
+                using var webClient = new GZipWebClient();
+                string result = webClient.DownloadString($"https://keeper.battlelog.com/snapshot/{guid}");
                 return JsonConvert.DeserializeObject<ServerInfo>(result)?
                     .Snapshot;
             }

@@ -351,6 +351,7 @@ namespace CompanionAPI
             var httpWebRequest = (HttpWebRequest)WebRequest.Create($"{Constants.CompanionAPI}{method}");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
+            httpWebRequest.UserAgent = "Mozilla/5.0 (compatible; BattleAPI)";
             httpWebRequest.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip;
 
