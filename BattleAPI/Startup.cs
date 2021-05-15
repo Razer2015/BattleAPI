@@ -35,21 +35,19 @@ namespace BattleAPI
 
             services.AddDistributedRedisCache(option =>
             {
-                option.Configuration = Variables.REDIS_CONFIGURATION ?? "127.0.0.1";
+                option.Configuration = Variables.REDIS_CONFIGURATION ?? "127.0.0.1,abortConnect=false,connectTimeout=500";
                 option.InstanceName = Variables.REDIS_INSTANCE ?? "master";
             });
 
             services.AddSingleton<ILoggingService, ConsoleLoggingService>();
 
             services.AddSingleton(Configuration);
-            services.AddSingleton<IAuthCodeService, AuthCodeService>(service => {
-                return new AuthCodeService(GenericHelpers.Combine(_env.ContentRootPath, "authcodes.json"));
-            });
+            services.AddSingleton<IAuthCodeService, AuthCodeService>();
             services.AddSingleton<ICompanionService, CompanionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ICompanionService companionService)
         {
             if (env.IsDevelopment())
             {
