@@ -1,13 +1,11 @@
 ﻿using BattleAPI.Services;
 using Battlelog;
-using CompanionAPI.Battlelog.Models;
 using CompanionAPI.Helpers;
 using CompanionAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
-using Shared.Models;
 using System;
 
 namespace BattleAPI.Controllers.V1ApiControllers

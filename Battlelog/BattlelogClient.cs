@@ -1,13 +1,81 @@
-﻿using Newtonsoft.Json;
+﻿using Battlelog.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shared;
 using Shared.Models;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 
 namespace Battlelog
 {
     public static class BattlelogClient
     {
+        /// <summary>
+        ///     Get post check sum used in some battlelog queries
+        /// </summary>
+        /// <returns></returns>
+        public static string GetPostCheckSum()
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://battlelog.battlefield.com/bf4/");
+                request.CookieContainer = new CookieContainer();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                var postChecksum = request.CookieContainer.GetCookies(response.ResponseUri)["beaker.session.id"].Value.Substring(0, 10);
+
+                return postChecksum;
+            }
+            catch (Exception e)
+            {
+                //Handle exceptions here however you want
+                Console.WriteLine(e.ToString());
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///     Get the persona for the given soldierName
+        /// </summary>
+        /// <param name="soldierName"></param>
+        /// <param name="postChecksum"></param>
+        /// <returns></returns>
+        public static Persona GetPersona(string soldierName, string postChecksum = null)
+        {
+            using var webClient = new GZipWebClient();
+
+            var data = new NameValueCollection() {
+                { "query", soldierName },
+                { "post-check-sum", string.IsNullOrWhiteSpace(postChecksum) ? GetPostCheckSum() : postChecksum }
+            };
+
+            string searchResults = Encoding.UTF8.GetString(webClient.UploadValues($"https://battlelog.battlefield.com/bf4/search/query/", data));
+
+            var res = JsonConvert.DeserializeObject<Response<Persona[]>>(searchResults);
+            if (res.Type.Equals("success") && res.Message.Equals("RESULT") && res.Data.Length > 0)
+            {
+                var matches = res.Data
+                    .Where(x => x.Namespace.Equals("cem_ea_id") && x.PersonaName.Equals(soldierName, StringComparison.OrdinalIgnoreCase))
+                    .GroupBy(p => p.PersonaId).Select(grp => grp.FirstOrDefault());
+                if (matches.Count() == 1) return matches.FirstOrDefault();
+
+                if (matches.Count() > 1)
+                {
+                    throw new Exception($"An error occured while searching. Found multiple matches.");
+                }
+                else
+                {
+                    throw new Exception($"An error occured while searching. Found no matches.");
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         ///     Get the server show data
         /// </summary>

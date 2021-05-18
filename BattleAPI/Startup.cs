@@ -44,6 +44,7 @@ namespace BattleAPI
             services.AddSingleton(Configuration);
             services.AddSingleton<IAuthCodeService, AuthCodeService>();
             services.AddSingleton<ICompanionService, CompanionService>();
+            services.AddSingleton<IPersonaService, PersonaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
