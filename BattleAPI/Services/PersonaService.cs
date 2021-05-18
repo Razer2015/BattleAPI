@@ -29,7 +29,7 @@ namespace BattleAPI.Services
             var cacheKey = IsValidEAGUID(eaGuid) ? $":eausers:{eaGuid}" : null;
 
             // Search from cache
-            if (TryGetPersonaInfo(cacheKey, out var personaInfo))
+            if (cacheKey != null && TryGetPersonaInfo(cacheKey, out var personaInfo))
             {
                 // TODO: Update the user clan tag.
                 return personaInfo;
@@ -40,7 +40,7 @@ namespace BattleAPI.Services
             // Search from the keeper if server guid was provided
             if (IsValidServerGUID(serverGuid) && TryGetPersonaInfoFromSnapshot(soldierName, serverGuid, out personaInfo))
             {
-                if (isAuthenticated)
+                if (isAuthenticated && cacheKey != null)
                 {
                     AddOrRefreshPersonaInfo(cacheKey, personaInfo);
                 }
@@ -50,7 +50,7 @@ namespace BattleAPI.Services
             // Search from Battlelog search feature
             if (TryGetPersonaInfoFromSearch(soldierName, out personaInfo))
             {
-                if (isAuthenticated)
+                if (isAuthenticated && cacheKey != null)
                 {
                     AddOrRefreshPersonaInfo(cacheKey, personaInfo);
                 }

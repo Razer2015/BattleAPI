@@ -31,9 +31,11 @@ namespace BattleAPI.Controllers.V1ApiControllers
 
                 if (model == null)
                 {
+                    _logger?.LogError("Failed to retrieve persona for soldier {soldierName} in server {serverGuid}", soldierName, serverGuid);
                     return BadRequestBattlelogResponse<PersonaInfo>(null, "Couldn't retrieve persona info");
                 }
-
+                
+                _logger?.LogInformation("Retrieved persona for soldier {soldierName} in server {serverGuid}", soldierName, serverGuid);
                 return SuccessBattlelogResponse(model);
             }
             catch (Exception ex)
@@ -52,9 +54,11 @@ namespace BattleAPI.Controllers.V1ApiControllers
 
                 if (model == null)
                 {
+                    _logger?.LogError("Failed to retrieve persona for guid {eaGuid} - soldier {soldierName} in server {serverGuid}", eaGuid, soldierName, serverGuid);
                     return BadRequestBattlelogResponse<PersonaInfo>(null, "Couldn't retrieve persona info");
                 }
 
+                _logger?.LogInformation("Retrieved persona for guid {eaGuid} - soldier {soldierName} in server {serverGuid}", eaGuid, soldierName, serverGuid);
                 return SuccessBattlelogResponse(model);
             }
             catch (Exception ex)
