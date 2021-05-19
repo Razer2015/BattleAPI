@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Shared;
 using Shared.Helpers;
 using Shared.Interfaces;
 using Shared.Services;
+using System.Net.NetworkInformation;
+using System.Collections.Generic;
 
 namespace BattleAPI
 {
@@ -45,6 +48,61 @@ namespace BattleAPI
             services.AddSingleton<IAuthCodeService, AuthCodeService>();
             services.AddSingleton<ICompanionService, CompanionService>();
             services.AddSingleton<IPersonaService, PersonaService>();
+
+            services.AddHealthChecks()
+                .AddRedis(Variables.REDIS_CONFIGURATION ?? "127.0.0.1,abortConnect=false,connectTimeout=500")
+                .AddCheck("battlelog", () =>
+                {
+                    Dictionary<string, object> data = new();
+                    try
+                    {
+                        using var ping = new Ping();
+
+                        var reply = ping.Send("battlelog.battlefield.com");
+
+                        data.Add("roundTripTime", reply.RoundtripTime);
+                        if (reply.Status != IPStatus.Success)
+                        {
+                            return HealthCheckResult.Unhealthy("Ping is unhealthy", null, data);
+                        }
+
+                        if (reply.RoundtripTime > 100)
+                        {
+                            return HealthCheckResult.Degraded("Ping is degraded", null, data);
+                        }
+
+                        return HealthCheckResult.Healthy("Ping is healthy", data);
+                    }
+                    catch
+                    {
+                        return HealthCheckResult.Unhealthy("Ping is unhealthy", null, data);
+                    }
+                })
+                .AddCheck("companion", () => {
+                    Dictionary<string, object> data = new();
+                    try
+                    {
+                        using var ping = new Ping();
+
+                        var reply = ping.Send("companion-api.battlefield.com");
+                        data.Add("roundTripTime", reply.RoundtripTime);
+                        if (reply.Status != IPStatus.Success)
+                        {
+                            return HealthCheckResult.Unhealthy("Ping is unhealthy", null, data);
+                        }
+
+                        if (reply.RoundtripTime > 100)
+                        {
+                            return HealthCheckResult.Degraded("Ping is degraded", null, data);
+                        }
+
+                        return HealthCheckResult.Healthy("Ping is healthy", data);
+                    }
+                    catch
+                    {
+                        return HealthCheckResult.Unhealthy("Ping is unhealthy", null, data);
+                    }
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +122,7 @@ namespace BattleAPI
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapControllers();
             });
         }
