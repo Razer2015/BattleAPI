@@ -115,18 +115,31 @@ namespace Shared.Models
             return null;
         }
 
-        public Player GetPlayer(string personaId)
+        public Player GetPlayerBySoldierName(string soldierName)
         {
-            var persona = GetPlayerByPersonaId(personaId);
+            var persona = GetPersona(soldierName);
             if (persona != null)
             {
+                persona.Value.Value.PersonaId = ulong.Parse(persona.Value.Key);
                 return persona.Value.Value;
             }
 
             return null;
         }
 
-        private KeyValuePair<string, Player>? GetPlayerByPersonaId(string personaId)
+        public Player GetPlayer(string personaId)
+        {
+            var persona = PlayerByPersonaId(personaId);
+            if (persona != null)
+            {
+                persona.Value.Value.PersonaId = ulong.Parse(persona.Value.Key);
+                return persona.Value.Value;
+            }
+
+            return null;
+        }
+
+        private KeyValuePair<string, Player>? PlayerByPersonaId(string personaId)
         {
             try
             {
