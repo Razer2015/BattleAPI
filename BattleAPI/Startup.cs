@@ -111,6 +111,10 @@ namespace BattleAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            
+            if (env.IsDevelopment() || Variables.SWAGGER_ENABLED)
+            {
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BattleAPI v1"));
             }
