@@ -16,6 +16,24 @@ namespace Shared.Models
         public BattlelogSlotTypesViewModel Slots { get; set; }
     }
 
+    public class CombinedPlayerCountsViewModel
+    {
+        [JsonProperty("map")]
+        public string Map { get; set; }
+        [JsonProperty("mapMode")]
+        public ulong MapMode { get; set; }
+        [JsonProperty("players")]
+        public ushort Players { get; set; }
+        [JsonProperty("queued")]
+        public ushort Queued { get; set; }
+        [JsonProperty("battlelogSlots")]
+        public BattlelogSlotTypesViewModel BattlelogSlots { get; set; }
+        [JsonProperty("companionSlots")]
+        public BattlelogSlotTypesViewModel CompanionSlots { get; set; }
+        [JsonProperty("snapshotSlots")]
+        public BattlelogSlotTypesViewModel SnapshotSlots { get; set; }
+    }
+
     public class BattlelogSlotTypesViewModel
     {
         [JsonProperty("1")]

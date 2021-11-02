@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Battlelog\Battlelog.csproj" />
     <ProjectReference Include="..\CompanionAPI\CompanionAPI.csproj" />
+    <ProjectReference Include="..\TimescaleDAL\TimescaleDAL.csproj" />
   </ItemGroup>
 
 </Project>

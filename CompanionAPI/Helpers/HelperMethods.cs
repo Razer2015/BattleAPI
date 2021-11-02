@@ -35,6 +35,41 @@ namespace CompanionAPI.Helpers
             };
         }
 
+        public static CombinedPlayerCountsViewModel CompanionPlayerCountsToCombined(this ServerDetailsViewModel serverDetails, BattlelogPlayerCountsViewModel battlelogPlayers, Snapshot snapshot)
+        {
+            return new CombinedPlayerCountsViewModel {
+                Map = battlelogPlayers?.Map ?? snapshot?.CurrentMap ?? serverDetails?.MapName,
+                MapMode = battlelogPlayers?.MapMode ?? snapshot?.MapVariant ?? (ulong)GenericHelpers.GameModeToEnum(serverDetails?.MapMode),
+                Players = 0,
+                Queued = 0,
+                CompanionSlots = serverDetails != null ? new BattlelogSlotTypesViewModel {
+                    Queue = new BattlelogSlotsViewModel {
+                        Current = serverDetails.Slots.Queue.Current,
+                        Max = serverDetails.Slots.Queue.Max
+                    },
+                    Soldier = new BattlelogSlotsViewModel {
+                        Current = serverDetails.Slots.Soldier.Current,
+                        Max = serverDetails.Slots.Soldier.Max
+                    },
+                    Spectator = new BattlelogSlotsViewModel {
+                        Current = serverDetails.Slots.Spectator.Current,
+                        Max = serverDetails.Slots.Spectator.Max
+                    }
+                } : null,
+                BattlelogSlots = battlelogPlayers?.Slots,
+                SnapshotSlots = snapshot != null ? new BattlelogSlotTypesViewModel {
+                    Queue = new BattlelogSlotsViewModel {
+                        Current = (ushort)snapshot.WaitingPlayers,
+                        Max = 20
+                    },
+                    Soldier = new BattlelogSlotsViewModel {
+                        Current = (ushort)snapshot.GetTotalPlayers(),
+                        Max = (ushort)snapshot.MaxPlayers
+                    }
+                } : null
+            };
+        }
+
         /// <summary>
         /// Create a new UUID for each calls
         /// </summary>

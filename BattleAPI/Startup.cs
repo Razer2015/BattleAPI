@@ -49,6 +49,11 @@ namespace BattleAPI
             services.AddSingleton<ICompanionService, CompanionService>();
             services.AddSingleton<IPersonaService, PersonaService>();
 
+            if (Variables.PLAYERCOUNT_LOGGING_ENABLED)
+            {
+                services.AddHostedService<PlayerCountWorker>();
+            }
+
             services.AddHealthChecks()
                 .AddRedis(Variables.REDIS_CONFIGURATION ?? "127.0.0.1,abortConnect=false,connectTimeout=500")
                 .AddCheck("battlelog", () =>

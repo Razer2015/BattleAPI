@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleAPI", "BattleAPI\BattleAPI.csproj", "{C286DDDE-BD61-4CEF-977E-D12AAA2E6810}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleAPI", "BattleAPI\BattleAPI.csproj", "{C286DDDE-BD61-4CEF-977E-D12AAA2E6810}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanionAPI", "CompanionAPI\CompanionAPI.csproj", "{0149BDE1-7EAD-4AE6-B233-71BD11EEB244}"
 EndProject
@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OriginAPI", "OriginAPI\Orig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{BB1F3B92-DAA0-466D-8550-378D1FA0EDC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battlelog", "Battlelog\Battlelog.csproj", "{BFD3E991-4F4F-4E1B-AAAD-F7BEF996E323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Battlelog", "Battlelog\Battlelog.csproj", "{BFD3E991-4F4F-4E1B-AAAD-F7BEF996E323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimescaleDAL", "TimescaleDAL\TimescaleDAL.csproj", "{ADA62D62-06DC-488E-AAE6-47806641474C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{BFD3E991-4F4F-4E1B-AAAD-F7BEF996E323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFD3E991-4F4F-4E1B-AAAD-F7BEF996E323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFD3E991-4F4F-4E1B-AAAD-F7BEF996E323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA62D62-06DC-488E-AAE6-47806641474C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA62D62-06DC-488E-AAE6-47806641474C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA62D62-06DC-488E-AAE6-47806641474C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA62D62-06DC-488E-AAE6-47806641474C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

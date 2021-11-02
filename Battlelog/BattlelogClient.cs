@@ -135,6 +135,28 @@ namespace Battlelog
         }
 
         /// <summary>
+        ///     Get the number of players on the server
+        /// </summary>
+        /// <param name="guid">Server guid</param>
+        /// <param name="platform">Platform</param>
+        /// <returns></returns>
+        public static BattlelogPlayerCountsViewModel GetNumPlayersOnServer(string guid, string platform = "pc")
+        {
+            try
+            {
+                using var webClient = new GZipWebClient();
+                string result = webClient.DownloadString($"https://battlelog.battlefield.com/bf4/servers/getNumPlayersOnServer/{platform}/{guid}/");
+                return JsonConvert.DeserializeObject<BattlelogPlayerCountsViewModel>(result);
+            }
+            catch (Exception e)
+            {
+                //Handle exceptions here however you want
+                Console.WriteLine(e.ToString());
+                return null;
+            }
+        }
+
+        /// <summary>
         ///     Get users by personaNames
         /// </summary>
         /// <param name="personaNames">Array of persona names</param>

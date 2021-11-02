@@ -118,3 +118,7 @@ docker service update --image xfilefin/battleapi:latest battleapi_backend --forc
 ## Building
 
 `docker build -t xfilefin/battleapi . --file BattleAPI/Dockerfile`
+
+## Credits
+
+- Philipp Wagner for [TimescaleDB stuff](https://www.bytefish.de/blog/timeseries_databases_3_timescaledb.html)
