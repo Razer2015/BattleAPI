@@ -51,9 +51,17 @@ namespace BattleAPI.Services
                 throw new Exception("Missing the timescale db connection string.");
             }
 
-            if (!_playerCountsDataBatchProcessor.TestConnection())
+            try
             {
-                throw new Exception("Unable to connect to timescale database.");
+                if (!_playerCountsDataBatchProcessor.TestConnection())
+                {
+                    throw new Exception("Unable to connect to timescale database.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Postgres database connection failed.");
+                return;
             }
 
             Task fetcher = PlayerCountFetcher(stoppingToken);

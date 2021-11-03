@@ -15,22 +15,15 @@ namespace TimescaleDAL
 
         public bool TestConnection()
         {
-            try
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using (var cmd = new NpgsqlCommand("SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_schema = 'battlefield' AND table_name = 'player_counts');", connection))
             {
-                using var connection = new NpgsqlConnection(_connectionString);
-                connection.Open();
-                using (var cmd = new NpgsqlCommand("SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_schema = 'battlefield' AND table_name = 'player_counts');", connection))
-                {
-                    var result = (bool)cmd.ExecuteScalar();
-                    if (!result) return false;
-                }
-                connection.Close();
-                return true;
+                var result = (bool)cmd.ExecuteScalar();
+                if (!result) return false;
             }
-            catch
-            {
-                return false;
-            }
+            connection.Close();
+            return true;
         }
 
         public ulong WriteToDatabase(IEnumerable<PlayerCountsData> entities)
